@@ -1,0 +1,130 @@
+---
+title: "simulationsetting"
+output: pdf_document
+date: '2022-07-11'
+---
+
+```{r setup, include=FALSE}
+library(raster)
+library(RandomFields)
+library(spatstat)
+#library(stars)
+library(sf)
+library(ggplot2)
+#library(INLA)
+library(maptools)
+source('samplegenerator.r')
+
+```
+
+## Parmeters Table 
+
+| Intercept | $\sigma$ | $\nu$ | 
+| ---- | ----- |
+| 100  | 30    |
+| Paragraph   | Text        |
+## generate surface
+
+```{r cars}
+R <- ppp(x = runif(100), y = runif(100),c(0,1),c(0,1))
+Win <- Window(R)
+r <- raster(nrows = 100, ncols = 100, xmn = 0, xmx = 1, ymn = 0, ymx = 1)
+x <- coordinates(r)[, 1]
+y <- coordinates(r)[, 2]
+```
+## common parameters settings
+```{r share}
+nu = 2
+var = 1
+mean = 10
+```
+## Homogenous setting 
+### scale = 0.05
+
+```{r homo, echo= T}
+r1 = r
+scale = 0.01
+model = RMwhittle(scale = scale,nu = nu, var = var)+RMtrend(mean = mean)
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r1) <- simu$variable1
+plot(r1)
+```
+
+### scale = 0.5
+```{r homo2, echo= T}
+r2 = r
+scale = 0.1
+model = RMwhittle(scale = scale,nu = nu, var = var)+RMtrend(mean = mean)
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r2) <- simu$variable1
+plot(r2)
+```
+```{r homo2, echo= T}
+r3 = r
+scale = 0.01
+var = 4
+model = RMwhittle(scale = scale,nu = nu, var = var)+RMtrend(mean = mean)
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r3) <- simu$variable1
+plot(r3)
+```
+```{r homo2, echo= T}
+r4 = r
+scale = 0.1
+model = RMwhittle(scale = scale,nu = nu, var = var)+RMtrend(mean = mean)
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r4) <- simu$variable1
+plot(r4)
+```
+## Adding an effect on X axis
+```{r fixed, echo= T}
+set.seed(111)
+r1 = r
+scale = 0.01
+beta = 2
+
+model = RMwhittle(scale = scale,nu = nu, var = var)+x*beta+RMtrend(mean = mean)
+
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r1) <- simu$variable1 
+plot(r1)
+```
+
+```{r fixed2, echo= T}
+set.seed(111)
+r2 = r
+scale = 0.1
+model = RMwhittle(scale = scale,nu = nu, var = var)+x*beta+RMtrend(mean = mean)
+
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r2) <- simu$variable1 
+plot(r2)
+```
+
+```{r fixed2, echo= T}
+set.seed(112)
+var = 4
+r3 = r
+scale = 0.01
+model = RMwhittle(scale = scale,nu = nu, var = var)+x*beta+RMtrend(mean = mean)
+
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r3) <- simu$variable1 
+plot(r3)
+```
+
+```{r fixed2, echo= T}
+set.seed(112)
+r4 = r
+scale = 0.1
+model = RMwhittle(scale = scale,nu = nu, var = var)+x*beta+RMtrend(mean = mean)
+
+simu <- RFsimulate(model = model, x = x, y = y)
+values(r4) <- simu$variable1 
+plot(r4)
+```
+par(mfrow = c(2,2))
+plot(r1)
+plot(r2)
+plot(r3)
+plot(r4)
