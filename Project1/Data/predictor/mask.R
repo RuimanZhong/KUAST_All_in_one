@@ -23,8 +23,8 @@ depoint <- depoint %>% st_as_sf(coords = c("x", "y"), dim = "XY") %>%
   st_set_crs(4326) %>%
   st_transform(2158)
 
-setwd("~/Documents/project /TBC/project 1/raw_data/sdei-global-annual-gwr-pm2-5-modis-misr-seawifs-aod-v4-gl-03-2016-geotiff")
-str <- 'p25_2016.tif'
+setwd("~/Documents/Project_1/data/area_2016_pm2.5")
+str <- 'gwr_p25_2016.tif'
 glo_pm <- raster(str)
 sr <- "+proj=utm +zone=29 +ellps=GRS80 +datum=NAD83 +units=m +no_defs" 
 

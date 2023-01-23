@@ -34,7 +34,7 @@ y <- coordinates(r)[, 2]
 ```
 ## common parameters settings
 ```{r share}
-nu = 2
+nu = 1
 var = 1
 mean = 10
 ```
